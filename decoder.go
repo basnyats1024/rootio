@@ -73,6 +73,29 @@ func (dec *Decoder) readString(s *string) error {
 
 }
 
+func (dec *Decoder) readCString(s *string, max int) error {
+	var err error
+	o := []byte{}
+	n := 0
+	var v byte
+	for {
+		err = dec.readBin(&v)
+		if err != nil {
+			return err
+		}
+		if v == 0 {
+			break
+		}
+		n += 1
+		if max > 0 && n >= max {
+			break
+		}
+		o = append(o, v)
+	}
+	*s = string(o)
+	return err
+}
+
 func (dec *Decoder) readBin(v interface{}) error {
 	return binary.Read(dec.buf, E, v)
 }
