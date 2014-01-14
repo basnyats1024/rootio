@@ -6,9 +6,9 @@ import (
 )
 
 type attmarker struct {
-	color int16
-	style int16
-	width float32
+	Color int16
+	Style int16
+	Width float32
 }
 
 func (a *attmarker) UnmarshalROOT(data *bytes.Buffer) error {
@@ -22,17 +22,7 @@ func (a *attmarker) UnmarshalROOT(data *bytes.Buffer) error {
 		return err
 	}
 
-	err = dec.readBin(&a.color)
-	if err != nil {
-		return err
-	}
-
-	err = dec.readBin(&a.style)
-	if err != nil {
-		return err
-	}
-
-	err = dec.readBin(&a.width)
+	err = dec.readBin(a)
 	if err != nil {
 		return err
 	}
