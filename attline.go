@@ -6,9 +6,9 @@ import (
 )
 
 type attline struct {
-	color int16
-	style int16
-	width int16
+	Color int16
+	Style int16
+	Width int16
 }
 
 func (a *attline) UnmarshalROOT(data *bytes.Buffer) error {
@@ -24,17 +24,7 @@ func (a *attline) UnmarshalROOT(data *bytes.Buffer) error {
 		myprintf("attline: %v %v %v\n", vers, pos, bcnt)
 	}
 
-	err = dec.readBin(&a.color)
-	if err != nil {
-		return err
-	}
-
-	err = dec.readBin(&a.style)
-	if err != nil {
-		return err
-	}
-
-	err = dec.readBin(&a.width)
+	err = dec.readBin(a)
 	if err != nil {
 		return err
 	}
