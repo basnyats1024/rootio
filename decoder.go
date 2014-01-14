@@ -184,6 +184,8 @@ func (dec *Decoder) readVersion() (version int16, position, bytecount int32, err
 
 func (dec *Decoder) readClass(name *string, count *int32, isref *bool) error {
 	var err error
+	*isref = false
+
 	var tag uint32
 	err = dec.readBin(&tag)
 	if err != nil {
@@ -193,12 +195,13 @@ func (dec *Decoder) readClass(name *string, count *int32, isref *bool) error {
 	switch {
 	case tag == kNullTag:
 		*isref = false
+		*count = 0
 		return err
 
 	case (tag & kByteCountMask) != 0:
 		// bufvers = 1
 		classtag := ""
-		err = dec.readString(&classtag)
+		err = dec.readClassTag(&classtag)
 		if err != nil {
 			return err
 		}
@@ -211,6 +214,7 @@ func (dec *Decoder) readClass(name *string, count *int32, isref *bool) error {
 	default:
 		*count = int32(tag)
 		*isref = true
+		*name = ""
 	}
 	return err
 }
@@ -227,12 +231,12 @@ func (dec *Decoder) readClassTag(classtag *string) error {
 	tagClassMask := (int64(tag) & (^int64(kClassMask))) != 0
 
 	if tagNewClass {
-		err = dec.readString(classtag)
+		err = dec.readCString(classtag, 80)
 		if err != nil {
 			return err
 		}
 	} else if tagClassMask {
-		panic("not implemented")
+		panic("rootio.readClassTag: kClassMask not implemented")
 	} else {
 		panic(fmt.Errorf("rootio.readClassTag: unknown class-tag [%v]", tag))
 	}
