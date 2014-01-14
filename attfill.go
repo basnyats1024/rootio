@@ -6,8 +6,8 @@ import (
 )
 
 type attfill struct {
-	color int16
-	style int16
+	Color int16
+	Style int16
 }
 
 func (a *attfill) UnmarshalROOT(data *bytes.Buffer) error {
@@ -21,12 +21,7 @@ func (a *attfill) UnmarshalROOT(data *bytes.Buffer) error {
 		return err
 	}
 
-	err = dec.readBin(&a.color)
-	if err != nil {
-		return err
-	}
-
-	err = dec.readBin(&a.style)
+	err = dec.readBin(a)
 	if err != nil {
 		return err
 	}
