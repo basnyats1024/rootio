@@ -75,12 +75,6 @@ func (si *StreamerInfo) UnmarshalROOT(data *bytes.Buffer) error {
 	return err
 }
 
-func (si *StreamerInfo) MarshalROOT(data *bytes.Buffer) error {
-	var err error
-	panic("not implemented")
-	return err
-}
-
 // check interfaces
 var _ Object = (*StreamerInfo)(nil)
 var _ ROOTUnmarshaler = (*StreamerInfo)(nil)
