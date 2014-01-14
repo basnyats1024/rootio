@@ -71,6 +71,20 @@ type Directory interface {
 	Get(namecycle string) (Object, bool)
 }
 
+// StreamerElement describes an element of a StreamerInfo
+type StreamerElement interface {
+	Name() string
+	Title() string
+	Type() int       // element type
+	Size() int       // sizeof element
+	ArrLen() int     // cumulative size of all array dims
+	ArrDim() int     // number of array dimensions
+	MaxIdx() []int32 // maximum array index for array dimension "dim"
+	Offset() int     // element offset in class
+	//IsNewType() int // new element type when reading
+	TypeName() string // data type name of data member
+}
+
 // ROOTUnmarshaler is the interface implemented by an object that can
 // unmarshal itself from a ROOT buffer
 type ROOTUnmarshaler interface {
