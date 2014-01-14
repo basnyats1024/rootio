@@ -81,4 +81,8 @@ func (si *StreamerInfo) MarshalROOT(data *bytes.Buffer) error {
 	return err
 }
 
+// check interfaces
+var _ Object = (*StreamerInfo)(nil)
+var _ ROOTUnmarshaler = (*StreamerInfo)(nil)
+
 // EOF
