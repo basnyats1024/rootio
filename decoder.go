@@ -139,7 +139,7 @@ func (dec *Decoder) readVersion() (version int16, position, bytecount int32, err
 		return
 	}
 	myprintf("readVersion - bytecount= %v\n", bcnt)
-	if (int64(bcnt) & ^kByteCountMask) != 0 {
+	if (int64(bcnt) & kByteCountMask) != 0 {
 		bytecount = int32(int64(bcnt) & ^kByteCountMask)
 		// as dec.buf was cloned, we need to read the 4-bytes holding the bytecount
 		// we just read.
