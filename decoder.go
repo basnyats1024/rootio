@@ -131,35 +131,28 @@ func (dec *Decoder) readVersion() (version int16, position, bytecount int32, err
 
 	start := dec.Pos()
 
+	tmp := dec.Clone()
+
 	var bcnt uint32
-	err = dec.readBin(&bcnt)
+	err = tmp.readBin(&bcnt)
 	if err != nil {
 		return
 	}
-	myprintf("readVersion - bytecount=%v\n", bcnt)
+	myprintf("readVersion - bytecount= %v\n", bcnt)
 	if (int64(bcnt) & ^kByteCountMask) != 0 {
 		bytecount = int32(int64(bcnt) & ^kByteCountMask)
+		// as dec.buf was cloned, we need to read the 4-bytes holding the bytecount
+		// we just read.
+		dec.buf.Next(4)
 	} else {
-		err = fmt.Errorf("rootio.readVersion: too old file")
-		return
+		// old version. no bytecount. next 4-bytes are holding the version.
+		// as dec.buf has been left unchanged, we don't need to rewind to read them.
 	}
 
-	var vers uint16
-	err = dec.readBin(&vers)
+	err = dec.readBin(&version)
 	if err != nil {
 		return
 	}
-	version = int16(vers)
-
-	/*
-	 */
-	//FIXME: hack
-	// var trash [8]byte
-	// err = dec.readBin(&trash)
-	// if err != nil {
-	// 	return
-	// }
-	//fmt.Printf("## data = %#v\n", trash[:])
 
 	position = int32(start)
 	myprintf("readVersion => [%v] [%v] [%v]\n", position, version, bytecount)
