@@ -104,17 +104,6 @@ func Open(path string) (*File, error) {
 
 func (f *File) readHeader() (err error) {
 
-	var stage string
-
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("Error reading file named %q while %s (%q)",
-				f.id, stage, r.(error).Error())
-		}
-	}()
-
-	stage = "reading header"
-
 	buf := make([]byte, 64)
 	_, err = f.ReadAt(buf, 0)
 	if err != nil {
@@ -242,19 +231,16 @@ func (f *File) readHeader() (err error) {
 		return err
 	}
 
-	stage = "read directory info"
 	err = f.root.readDirInfo()
 	if err != nil {
 		return err
 	}
 
-	stage = "read streamerinfos"
 	err = f.readStreamerInfo()
 	if err != nil {
 		return err
 	}
 
-	stage = "read keys"
 	err = f.root.readKeys()
 	if err != nil {
 		return err
