@@ -277,6 +277,38 @@ func (dec *Decoder) readObject(o *Object) error {
 		return err
 	}
 
+	myprintf("readObject: class=%v count=%v isref=%v\n", class, count, isref)
+	if isref {
+		panic("isref: not implemented")
+		return err
+	}
+
+	if class == "" {
+		panic("nil class")
+		return err
+	}
+
+	factory := Factory.Get(class)
+	if factory == nil {
+		err = fmt.Errorf("rootio: no factory registered for [%v]", class)
+		return err
+	}
+
+	vv := factory()
+	*o = vv.Interface().(Object)
+	if vv, ok := (*o).(ROOTUnmarshaler); ok {
+		err = vv.UnmarshalROOT(dec.buf)
+		if err != nil {
+			return fmt.Errorf("rootio: error decoding class [%v]: %v", class, err)
+		}
+	} else {
+		return fmt.Errorf("rootio: class [%v] does not satisfy ROOTUnmashaler interface", class)
+	}
+	return err
+}
+
+func (dec *Decoder) readObjectAny(ptr interface{}) error {
+	var err error
 	return err
 }
 
