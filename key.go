@@ -79,7 +79,9 @@ func (k *Key) Bytes() ([]byte, error) {
 const ROOT_HDRSIZE = 9
 
 func (k *Key) load() ([]byte, error) {
+	myprintf(">>> rootio.Key.load(%v)...\n", k.Name()+"|"+k.Title())
 	if k.isCompressed() {
+		myprintf(">>> rootio.Key.load(%v)... (compressed)\n", k.Name()+"|"+k.Title())
 		// ... therefore it's compressed
 		start := k.seekkey + int64(k.keylen) + ROOT_HDRSIZE
 		r := io.NewSectionReader(k.f, start, int64(k.bytes)-int64(k.keylen))
@@ -88,11 +90,12 @@ func (k *Key) load() ([]byte, error) {
 			panic(err)
 		}
 
-		buf := &bytes.Buffer{}
+		buf := new(bytes.Buffer)
 		_, err = io.Copy(buf, rc)
 		if err != nil {
 			return nil, err
 		}
+		myprintf(">>> rootio.Key.load(%v)... [done]\n", k.Name()+"|"+k.Title())
 		return buf.Bytes(), nil
 	}
 	// ... not compressed
