@@ -194,11 +194,13 @@ func (dec *Decoder) readClass(name *string, count *int32, isref *bool) error {
 	myprintf("::readClass. first int: [%v]\n", tag)
 	switch {
 	case tag == kNullTag:
+		myprintf("::readClass: tag==kNullTag\n")
 		*isref = false
 		*count = 0
 		return err
 
 	case (tag & kByteCountMask) != 0:
+		myprintf("::readClass: tag & kByteCountMask\n")
 		// bufvers = 1
 		classtag := ""
 		err = dec.readClassTag(&classtag)
@@ -212,6 +214,7 @@ func (dec *Decoder) readClass(name *string, count *int32, isref *bool) error {
 		*count = int32(int64(tag) & ^kByteCountMask)
 		*isref = false
 	default:
+		myprintf("::readClass: tag => default\n")
 		*count = int32(tag)
 		*isref = true
 		*name = ""
