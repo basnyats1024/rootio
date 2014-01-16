@@ -309,6 +309,7 @@ func (dec *Decoder) readObject(o *Object) error {
 
 func (dec *Decoder) readObjectAny(ptr interface{}) error {
 	var err error
+	panic("not implemented")
 	return err
 }
 
