@@ -332,6 +332,14 @@ func (f *File) readStreamerInfo() error {
 		return fmt.Errorf("rootio: requested [%v] bytes. read [%v] bytes from file", f.nbytesinfo, nbytes)
 	}
 
+	key := Key{f: f}
+	err = key.UnmarshalROOT(bytes.NewBuffer(buf))
+	if err != nil {
+		return err
+	}
+	myprintf(">>> list: %v\n", key.Name())
+	o := key.Value().(Object)
+	myprintf(">>> list: %v\n", o.Name())
 	myprintf(":: readStreamerInfo... [done]\n")
 	return err
 }
