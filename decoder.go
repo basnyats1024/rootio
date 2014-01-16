@@ -279,12 +279,14 @@ func (dec *Decoder) readObject(o *Object) error {
 
 	myprintf("readObject: class=%v count=%v isref=%v\n", class, count, isref)
 	if isref {
-		panic("isref: not implemented")
+		err = fmt.Errorf("isref: not implemented")
+		panic(err)
 		return err
 	}
 
 	if class == "" {
-		panic("nil class")
+		err = fmt.Errorf("nil class")
+		panic(err)
 		return err
 	}
 
