@@ -1,5 +1,7 @@
 # rootio
 
+**DEPRECATED** Please use `go-hep.org/x/hep/...` instead.
+
 [![Build Status](https://secure.travis-ci.org/go-hep/rootio.png)](http://travis-ci.org/go-hep/rootio)
 [![GoDoc](https://godoc.org/github.com/go-hep/rootio?status.svg)](https://godoc.org/github.com/go-hep/rootio)
 
